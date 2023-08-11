@@ -32,6 +32,8 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Configuration(proxyBeanMethods = false)
@@ -71,10 +73,11 @@ public class AuthorizationServerConfig {
                 .clientId("taskservice")
                 .clientSecret("{noop}taskservice")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("https://oidcdebugger.com/debug")
-                .scope("taskservice")
-                .tokenSettings(TokenSettings.builder().build())
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.of(30, ChronoUnit.MINUTES))
+                        .build())
+                .scope("access-tasks")
                 .build();
 
         return new InMemoryRegisteredClientRepository(manualClient, taskServiceClient);
