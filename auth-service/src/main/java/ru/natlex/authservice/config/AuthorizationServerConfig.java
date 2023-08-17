@@ -34,6 +34,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Configuration(proxyBeanMethods = false)
@@ -61,37 +62,35 @@ public class AuthorizationServerConfig {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient manualClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("manual")
-                .clientSecret("{noop}manual")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("https://oidcdebugger.com/debug")
-                .scope("manual")
-                .build();
         RegisteredClient taskServiceClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("taskservice")
                 .clientSecret("{noop}taskservice")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("https://oauth.pstmn.io/v1/callback")
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.of(30, ChronoUnit.MINUTES))
                         .build())
                 .scope("access-tasks")
                 .build();
 
-        return new InMemoryRegisteredClientRepository(manualClient, taskServiceClient);
+        return new InMemoryRegisteredClientRepository(taskServiceClient);
     }
 
     @Bean
     public UserDetailsService users() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("admin")
                 .roles("ADMIN")
                 .build();
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("user")
+                .roles("USER")
+                .build();
 
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(admin, user);
     }
 
     @Bean

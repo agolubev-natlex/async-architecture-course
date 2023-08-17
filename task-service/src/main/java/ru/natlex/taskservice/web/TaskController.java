@@ -11,4 +11,9 @@ public class TaskController {
     public String[] getTasks() {
         return new String[] { "Task 1", "Task 2", "Task 3" };
     }
+
+    @GetMapping("/2")
+    public String[] getTasks2() {
+        return new String[] { "Task 11", "Task 22", "Task 33" };
+    }
 }
