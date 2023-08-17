@@ -6,3 +6,11 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:9999
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id:
+
+kafka:
+  topics:
+    users-topic: users-topic
