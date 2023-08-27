@@ -19,9 +19,13 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.kafka:spring-kafka:3.0.9'
+    runtimeOnly 'com.h2database:h2'
+
+    implementation files('D:\\async-architecture-course\\commons\\build\\libs\\commons-0.0.1-SNAPSHOT-plain.jar')
+
 }
 
 tasks.named('test') {
