@@ -3,6 +3,7 @@ package ru.natlex.taskservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.natlex.commons.config.utils.KafkaTopics;
 import ru.natlex.taskservice.entity.Task;
 import ru.natlex.taskservice.entity.UserPublicAccount;
 import ru.natlex.taskservice.messaging.KafkaProducer;
@@ -24,7 +25,7 @@ public class TaskService {
         task.setWithdraw(-(secureRandom.nextInt(10) + 10));
         task.setAward(secureRandom.nextInt(20) + 20);
         taskRepository.save(task);
-        kafkaProducer.publishMessage(task);
+        kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_CREATED_TOPIC, task);
     }
 
     public List<Task> getAll() {
@@ -36,7 +37,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Задача не найдена"));
         task.setStatus(Task.TaskStatus.CLOSE);
         taskRepository.save(task);
-        kafkaProducer.publishMessage(task);
+        kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_CLOSED_TOPIC, task);
     }
 
     public void updateTask(Long id, String name, String description, String userPublicId) {
@@ -46,7 +47,7 @@ public class TaskService {
         task.setDescription(description);
         task.setUserPublicAccountId(userPublicId);
         taskRepository.save(task);
-        kafkaProducer.publishMessage(task);
+        kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_UPDATED_TOPIC, task);
     }
 
     @Transactional
@@ -65,6 +66,6 @@ public class TaskService {
             openedTask.setUserPublicAccountId(allAccounts.get(new SecureRandom().nextInt(allAccounts.size())));
         }
         taskRepository.saveAll(openedTasks);
-        kafkaProducer.publishMessage(openedTasks);
+        kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_RESHUFFLED_TOPIC, openedTasks);
     }
 }

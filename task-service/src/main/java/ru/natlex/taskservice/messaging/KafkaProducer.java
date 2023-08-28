@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 public class KafkaProducer {
 
     private final ObjectMapper objectMapper;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @SneakyThrows
-    public void publishMessage(Object message) {
-        kafkaTemplate.send("tasks-topic", objectMapper.writeValueAsString(message));
+    public void publishMessage(String topic, Object event) {
+        kafkaTemplate.send(topic, objectMapper.writeValueAsString(event));
     }
 }
