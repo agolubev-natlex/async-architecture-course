@@ -3,7 +3,7 @@ package ru.natlex.taskservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"ru.natlex.commons", "ru.natlex.taskservice"})
 public class TaskServiceApplication {
 
     public static void main(String[] args) {

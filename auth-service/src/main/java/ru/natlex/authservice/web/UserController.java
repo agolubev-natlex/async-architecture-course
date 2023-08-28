@@ -1,20 +1,29 @@
 package ru.natlex.authservice.web;
 
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.natlex.authservice.messaging.KafkaProducer;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import ru.natlex.authservice.entity.UserEntity;
+import ru.natlex.authservice.service.UserService;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/users")
-@AllArgsConstructor
+@RequestMapping("users")
 public class UserController {
 
-    private final KafkaProducer kafkaProducer;
+    private final UserService userService;
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void createNewUser(@RequestBody UserEntity user) {
+        user.setId(null);
+        userService.createUser(user);
+    }
 
     @GetMapping
-    public void createUser() {
-        kafkaProducer.sendMessage();
+    public List<UserEntity> getUsers() {
+        return userService.getAll();
     }
 }

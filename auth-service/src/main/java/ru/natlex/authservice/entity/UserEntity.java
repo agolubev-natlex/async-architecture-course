@@ -31,4 +31,10 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column
     private Role role;
+
+    public enum Role {
+        ADMIN,
+        MANAGER,
+        POPUG
+    }
 }

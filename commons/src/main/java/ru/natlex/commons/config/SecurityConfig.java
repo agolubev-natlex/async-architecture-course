@@ -1,8 +1,10 @@
-package ru.natlex.authservice.config;
+package ru.natlex.commons.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,13 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.natlex.commons.config.JwtTokenFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
@@ -27,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers(new AntPathRequestMatcher("/login/**")).permitAll()
+                        authorizeRequests
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -38,10 +39,4 @@ public class SecurityConfig {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

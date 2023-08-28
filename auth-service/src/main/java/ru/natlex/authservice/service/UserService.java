@@ -3,15 +3,14 @@ package ru.natlex.authservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.natlex.authservice.config.UserInfo;
-import ru.natlex.authservice.entity.Role;
 import ru.natlex.authservice.entity.UserEntity;
+import ru.natlex.authservice.messaging.KafkaProducer;
 import ru.natlex.authservice.repository.UserRepository;
 
 import java.util.List;
@@ -22,6 +21,7 @@ public class UserService implements UserDetailsService, InitializingBean {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaProducer kafkaProducer;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService, InitializingBean {
         String password = passwordEncoder.encode(user.getPasswordHash());
         user.setPasswordHash(password);
         userRepository.save(user);
-        //todo send event to kafka
+        kafkaProducer.sendUserMessage(user);
     }
 
     public UserEntity getByUserName(String username) {
@@ -42,21 +42,19 @@ public class UserService implements UserDetailsService, InitializingBean {
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
 
-    public UserDetails loadUserByPublicId(String userPublicId) {
-        return null;
-    }
-
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         UserEntity admin = new UserEntity();
         admin.setPasswordHash(passwordEncoder.encode("admin"));
         admin.setUsername("admin");
-        admin.setRole(Role.ADMIN);
+        admin.setRole(UserEntity.Role.ADMIN);
         UserEntity popug = new UserEntity();
         popug.setPasswordHash(passwordEncoder.encode("popug"));
         popug.setUsername("popug");
-        popug.setRole(Role.POPUG);
+        popug.setRole(UserEntity.Role.POPUG);
         userRepository.saveAll(List.of(admin, popug));
+        kafkaProducer.sendUserMessage(admin); // can be batch
+        kafkaProducer.sendUserMessage(popug);
     }
 
     public List<UserEntity> getAll() {
