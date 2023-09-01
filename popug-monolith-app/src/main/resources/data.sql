@@ -1,0 +1,1 @@
+INSERT INTO popug_user (public_id,name,username,password) VALUES ('03252059-2090-4d16-bfa7-de895a54ec07','Admin','admin','123');

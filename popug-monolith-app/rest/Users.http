@@ -1,0 +1,44 @@
+###
+# GET users
+###
+// @no-redirect
+GET {{host}}/restful/users
+
+###
+# GET user
+###
+// @no-redirect
+GET {{host}}/restful/users/1
+
+###
+# ADD user
+###
+// @no-redirect
+POST {{host}}/restful/users
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "123",
+  "name": "User One"
+}
+
+###
+# EDIT user
+###
+// @no-redirect
+PUT {{host}}/restful/users/123
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": "",
+  "name": ""
+
+}
+
+###
+# DELETE user
+###
+// @no-redirect
+DELETE {{host}}/restful/users/2

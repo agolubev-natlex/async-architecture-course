@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Users</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+<body>
+<h1 th:inline="text">Current user: <span th:remove="tag" sec:authentication="name">thymeleaf</span></h1>
+
+<p><a href="/signup">Add a new user</a></p>
+
+<table style="width:100%">
+    <thead>
+        <tr>
+            <td>id</td>
+            <td>username</td>
+            <td>name</td>
+            <td>roles</td>
+            <td>public id</td>
+            <td>edit link</td>
+            <td>delete link</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user: ${users}">
+            <td th:text="${user.id}" />
+            <td th:text="${user.username}" />
+            <td th:text="${user.name}" />
+            <td>n/a</td>
+            <td th:text="${user.publicId}" />
+            <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
+            <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

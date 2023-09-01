@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <springProfile>
+        <logger name="org" level="ERROR"/>
+        <logger name="com" level="ERROR"/>
+        <logger name="com.popug" level="INFO"/>
+    </springProfile>
+
+    <springProfile name="dev">
+        <logger name="org" level="DEBUG"/>
+        <logger name="com" level="DEBUG"/>
+        <logger name="com.popug" level="DEBUG"/>
+    </springProfile>
+
+</configuration>

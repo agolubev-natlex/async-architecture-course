@@ -1,0 +1,23 @@
+###
+# login
+###
+
+// @no-redirect
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=123
+
+###
+# logout
+###
+
+// @no-redirect
+GET {{host}}/logout
+
+###
+# check
+###
+
+// @no-redirect
+GET {{host}}/hello
