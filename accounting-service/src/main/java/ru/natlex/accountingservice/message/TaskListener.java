@@ -12,22 +12,22 @@ import ru.natlex.commons.config.utils.KafkaTopics;
 @Component
 public class TaskListener {
 
-    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_CREATED_TOPIC, id = "1")
+    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_CREATED_TOPIC, id = "task-created-1")
     public void onTaskCreatedEvent(@Payload String message) {
         log.info("TaskCreatedEvent received, {}", message);
     }
 
-    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_UPDATED_TOPIC,id = "2")
+    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_UPDATED_TOPIC,id = "task-updated-1")
     public void onTaskUpdatedEvent(@Payload String message) {
         log.info("TaskUpdatedEvent received, {}", message);
     }
 
-    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_CLOSED_TOPIC, id = "3")
+    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_CLOSED_TOPIC, id = "task-closed-1")
     public void onTaskClosedEvent(@Payload String message) {
         log.info("TaskClosedEvent received, {}", message);
     }
 
-    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_RESHUFFLED_TOPIC, id = "4")
+    @KafkaListener(topics = KafkaTopics.TASK_SERVICE_TASK_RESHUFFLED_TOPIC, id = "task-reshuffled-1")
     public void onTaskReshuffledEvent(@Payload String message) {
         log.info("TaskReshuffledEvent received, {}", message);
     }

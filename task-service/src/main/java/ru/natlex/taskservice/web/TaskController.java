@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/tasks/")
 public class TaskController {
 
     private final TaskService taskService;
@@ -30,7 +30,7 @@ public class TaskController {
         taskService.createTask(task);
     }
 
-    @PostMapping("/every-day-im-shuffling")
+    @PostMapping("every-day-im-shuffling")
     public void shuffleTasks() {
         taskService.shuffleTasks();
     }
