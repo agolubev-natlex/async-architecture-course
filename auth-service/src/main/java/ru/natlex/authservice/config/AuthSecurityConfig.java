@@ -1,6 +1,6 @@
 package ru.natlex.authservice.config;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.natlex.commons.config.JwtTokenFilter;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration

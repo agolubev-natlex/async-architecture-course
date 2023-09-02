@@ -2,7 +2,7 @@ package ru.natlex.taskservice.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import ru.natlex.taskservice.entity.UserPublicAccount;
 import ru.natlex.taskservice.service.UserPublicAccountService;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Component
 @Slf4j
 public class KafkaConsumer {

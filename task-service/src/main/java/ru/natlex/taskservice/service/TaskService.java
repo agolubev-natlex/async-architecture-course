@@ -1,6 +1,6 @@
 package ru.natlex.taskservice.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.natlex.commons.config.utils.KafkaTopics;
@@ -12,7 +12,7 @@ import ru.natlex.taskservice.repository.TaskRepository;
 import java.security.SecureRandom;
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class TaskService {
 
@@ -40,12 +40,11 @@ public class TaskService {
         kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_CLOSED_TOPIC, task);
     }
 
-    public void updateTask(Long id, String name, String description, String userPublicId) {
+    public void updateTask(Long id, String name, String description) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Задача не найдена"));
         task.setName(name);
         task.setDescription(description);
-        task.setUserPublicAccountId(userPublicId);
         taskRepository.save(task);
         kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_UPDATED_TOPIC, task);
     }
@@ -67,5 +66,9 @@ public class TaskService {
         }
         taskRepository.saveAll(openedTasks);
         kafkaProducer.publishMessage(KafkaTopics.TASK_SERVICE_TASK_RESHUFFLED_TOPIC, openedTasks);
+    }
+
+    public List<Task> getTasksByUser(String userPublicId) {
+        return taskRepository.findAllByUserPublicAccountIdOrderByIdDesc(userPublicId);
     }
 }

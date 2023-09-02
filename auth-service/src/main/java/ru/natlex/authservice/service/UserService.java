@@ -1,6 +1,6 @@
 package ru.natlex.authservice.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,7 @@ import ru.natlex.authservice.repository.UserRepository;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService, InitializingBean {
 
@@ -52,9 +52,19 @@ public class UserService implements UserDetailsService, InitializingBean {
         popug.setPasswordHash(passwordEncoder.encode("popug"));
         popug.setUsername("popug");
         popug.setRole(UserEntity.Role.POPUG);
-        userRepository.saveAll(List.of(admin, popug));
+        UserEntity manager = new UserEntity();
+        manager.setPasswordHash(passwordEncoder.encode("manager"));
+        manager.setUsername("manager");
+        manager.setRole(UserEntity.Role.MANAGER);
+        UserEntity accountant = new UserEntity();
+        accountant.setPasswordHash(passwordEncoder.encode("accountant"));
+        accountant.setUsername("accountant");
+        accountant.setRole(UserEntity.Role.ACCOUNTANT);
+        userRepository.saveAll(List.of(admin, popug, manager, accountant));
         kafkaProducer.sendUserMessage(admin); // can be batch
         kafkaProducer.sendUserMessage(popug);
+        kafkaProducer.sendUserMessage(manager); // can be batch
+        kafkaProducer.sendUserMessage(accountant);
     }
 
     public List<UserEntity> getAll() {

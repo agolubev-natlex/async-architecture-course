@@ -1,7 +1,9 @@
 package ru.natlex.taskservice.web;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.natlex.taskservice.entity.Task;
@@ -9,16 +11,30 @@ import ru.natlex.taskservice.service.TaskService;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 @RequestMapping("/tasks/")
 public class TaskController {
 
     private final TaskService taskService;
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping
     public List<Task> getTasks() {
         return taskService.getAll();
+    }
+
+    @PreAuthorize("hasAnyAuthority('POPUG')")
+    @GetMapping("my")
+    public List<Task> getMyTasks() {
+        String userPublicId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return taskService.getTasksByUser(userPublicId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @GetMapping("by-user/{userPublicId}")
+    public List<Task> getMyTasks(@PathVariable String userPublicId) {
+        return taskService.getTasksByUser(userPublicId);
     }
 
     @PostMapping
@@ -26,7 +42,6 @@ public class TaskController {
         Task task = new Task();
         task.setName(dto.name);
         task.setDescription(dto.description);
-        task.setUserPublicAccountId(dto.userPublicId);
         taskService.createTask(task);
     }
 
@@ -37,7 +52,7 @@ public class TaskController {
 
     @PatchMapping("{id}")
     public void updateTask(@PathVariable Long id, @RequestBody @Validated TaskRequestBodyDto dto) {
-        taskService.updateTask(id, dto.name, dto.description, dto.userPublicId);
+        taskService.updateTask(id, dto.name, dto.description);
     }
 
     @PutMapping("{id}")
@@ -45,7 +60,7 @@ public class TaskController {
         taskService.closeTask(id);
     }
 
-    record TaskRequestBodyDto(@NotNull String name, String description, String userPublicId) {
+    record TaskRequestBodyDto(@NotNull String name, String description) {
 
     }
 }

@@ -1,12 +1,12 @@
 package ru.natlex.authservice.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.natlex.commons.config.JwtTokenProvider;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class LoginService {
 

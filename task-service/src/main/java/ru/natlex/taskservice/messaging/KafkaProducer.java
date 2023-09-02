@@ -1,12 +1,12 @@
 package ru.natlex.taskservice.messaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Component
 public class KafkaProducer {
 

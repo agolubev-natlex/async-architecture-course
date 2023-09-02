@@ -1,13 +1,13 @@
 package ru.natlex.taskservice.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.natlex.taskservice.entity.UserPublicAccount;
 import ru.natlex.taskservice.repository.UserPublicAccountRepository;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class UserPublicAccountService {
     private final UserPublicAccountRepository userRepository;
