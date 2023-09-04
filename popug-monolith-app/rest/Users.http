@@ -18,9 +18,10 @@ POST {{host}}/restful/users
 Content-Type: application/json
 
 {
-  "username": "user1",
+  "username": "user",
   "password": "123",
-  "name": "User One"
+  "name": "User",
+  "role": "USER"
 }
 
 ###

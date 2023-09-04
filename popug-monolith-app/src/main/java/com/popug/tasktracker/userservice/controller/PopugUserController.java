@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = "users")
-public class PopugUserController {
 
+public class PopugUserController {
     @Autowired
     private PopugUserRepository popugUserRepository;
 

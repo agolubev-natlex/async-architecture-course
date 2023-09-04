@@ -2,6 +2,8 @@ package com.popug.tasktracker.userservice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,18 +19,27 @@ import java.util.UUID;
 @NoArgsConstructor @Getter @Setter
 public class PopugUser {
 
+    public enum Role {
+        ADMIN,USER
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(updatable = false)
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID publicId;
+    @Column(updatable = false, nullable = false)
+    private String publicId = UUID.randomUUID().toString();
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 }
